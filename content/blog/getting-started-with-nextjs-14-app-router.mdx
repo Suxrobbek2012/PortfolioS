@@ -1,0 +1,158 @@
+---
+title: "Getting Started with Next.js 14 App Router"
+excerpt: "A comprehensive guide to building modern web applications with Next.js 14's App Router, Server Components, and the new data fetching patterns."
+date: "2024-03-15"
+tags: ["nextjs", "tutorial", "react", "typescript"]
+readTime: 8
+published: true
+---
+
+# Getting Started with Next.js 14 App Router
+
+Next.js 14 brings significant improvements to the App Router introduced in version 13. In this guide, we'll explore the key concepts and patterns you need to know to build production-ready applications.
+
+## What's New in Next.js 14
+
+The App Router represents a fundamental shift in how we build React applications. Instead of the traditional Pages Router, we now have:
+
+- **Server Components by default** — components render on the server, reducing client-side JavaScript
+- **Nested layouts** — share UI between routes without re-rendering
+- **Streaming** — progressively render UI with Suspense
+- **Server Actions** — run server-side code directly from components
+
+## Setting Up Your Project
+
+```bash
+npx create-next-app@latest my-app --typescript --tailwind --app
+cd my-app
+npm run dev
+```
+
+## Understanding the File Structure
+
+```
+app/
+  layout.tsx        # Root layout (always rendered)
+  page.tsx          # Home page (/)
+  about/
+    page.tsx        # About page (/about)
+  blog/
+    layout.tsx      # Blog layout (shared)
+    page.tsx        # Blog list (/blog)
+    [slug]/
+      page.tsx      # Blog post (/blog/my-post)
+```
+
+## Server Components vs Client Components
+
+By default, all components in the `app` directory are **Server Components**. They run on the server and can directly access databases, file systems, and APIs.
+
+```tsx
+// This runs on the server — no 'use client' needed
+async function BlogPosts() {
+  const posts = await db.post.findMany() // Direct DB access!
+  
+  return (
+    <ul>
+      {posts.map(post => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  )
+}
+```
+
+For interactivity (useState, useEffect, event handlers), add `'use client'` at the top:
+
+```tsx
+'use client'
+
+import { useState } from 'react'
+
+export function Counter() {
+  const [count, setCount] = useState(0)
+  return <button onClick={() => setCount(c => c + 1)}>{count}</button>
+}
+```
+
+## Data Fetching Patterns
+
+### Parallel Data Fetching
+
+```tsx
+async function Dashboard() {
+  // These run in parallel — much faster!
+  const [user, posts, analytics] = await Promise.all([
+    getUser(),
+    getPosts(),
+    getAnalytics(),
+  ])
+  
+  return <DashboardUI user={user} posts={posts} analytics={analytics} />
+}
+```
+
+### Streaming with Suspense
+
+```tsx
+import { Suspense } from 'react'
+
+export default function Page() {
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <Suspense fallback={<Skeleton />}>
+        <SlowComponent />
+      </Suspense>
+    </div>
+  )
+}
+```
+
+## Server Actions
+
+Server Actions let you run server-side code directly from your components:
+
+```tsx
+async function createPost(formData: FormData) {
+  'use server'
+  
+  const title = formData.get('title') as string
+  await db.post.create({ data: { title } })
+  revalidatePath('/blog')
+}
+
+export function NewPostForm() {
+  return (
+    <form action={createPost}>
+      <input name="title" placeholder="Post title" />
+      <button type="submit">Create Post</button>
+    </form>
+  )
+}
+```
+
+## Metadata API
+
+Next.js 14 provides a powerful Metadata API for SEO:
+
+```tsx
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'My Blog',
+  description: 'A blog about web development',
+  openGraph: {
+    title: 'My Blog',
+    images: ['/og-image.png'],
+  },
+}
+```
+
+## Conclusion
+
+The App Router in Next.js 14 is a game-changer for React development. By embracing Server Components, you get better performance, simpler data fetching, and a more intuitive mental model for building web applications.
+
+Start small — migrate one page at a time, and you'll quickly see the benefits of this new paradigm.
+
+Happy coding! 🚀

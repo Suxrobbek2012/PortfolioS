@@ -1,0 +1,187 @@
+---
+title: "CSS Animations vs Framer Motion: Which to Choose?"
+excerpt: "A deep dive into the tradeoffs between pure CSS animations and Framer Motion for React applications. When to use each, performance considerations, and real-world examples."
+date: "2024-02-28"
+tags: ["css", "animation", "framer-motion", "react"]
+readTime: 6
+published: true
+---
+
+# CSS Animations vs Framer Motion: Which to Choose?
+
+Animations are a crucial part of modern web experiences. But with multiple options available, choosing the right tool can be confusing. Let's break down when to use CSS animations versus Framer Motion.
+
+## CSS Animations: The Foundation
+
+CSS animations are built into the browser and require zero JavaScript. They're perfect for:
+
+- Simple, repeating animations (spinners, pulses, bounces)
+- Performance-critical animations (transforms, opacity)
+- Animations that don't depend on JavaScript state
+
+### CSS Animation Example
+
+```css
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.floating-element {
+  animation: float 3s ease-in-out infinite;
+}
+```
+
+```css
+/* Hover transitions */
+.button {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+```
+
+### When CSS Wins
+
+✅ Simple hover effects  
+✅ Loading spinners  
+✅ Infinite loops  
+✅ No JavaScript dependency  
+✅ Best performance (GPU-accelerated)
+
+## Framer Motion: The React Powerhouse
+
+Framer Motion is a production-ready animation library for React. It shines when you need:
+
+- Animations tied to React state
+- Complex orchestration (staggered children, sequences)
+- Gesture-based animations (drag, hover, tap)
+- Layout animations (elements changing position/size)
+- Exit animations (AnimatePresence)
+
+### Framer Motion Examples
+
+```tsx
+import { motion, AnimatePresence } from 'framer-motion'
+
+// Basic animation
+function FadeIn({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+```
+
+```tsx
+// Staggered children
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+}
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+}
+
+function StaggeredList({ items }: { items: string[] }) {
+  return (
+    <motion.ul variants={container} initial="hidden" animate="show">
+      {items.map(i => (
+        <motion.li key={i} variants={item}>{i}</motion.li>
+      ))}
+    </motion.ul>
+  )
+}
+```
+
+```tsx
+// Exit animations
+function Modal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ type: 'spring', damping: 25 }}
+        >
+          <button onClick={onClose}>Close</button>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+```
+
+### When Framer Motion Wins
+
+✅ Scroll-triggered animations  
+✅ Drag and drop interactions  
+✅ Complex enter/exit sequences  
+✅ Layout animations (reordering lists)  
+✅ Gesture-based interactions  
+✅ Orchestrated multi-element animations
+
+## Performance Comparison
+
+| Feature | CSS | Framer Motion |
+|---------|-----|---------------|
+| Bundle size | 0kb | ~45kb |
+| GPU acceleration | ✅ | ✅ |
+| JS dependency | ❌ | ✅ |
+| Exit animations | ❌ | ✅ |
+| Gesture support | Limited | ✅ |
+| Learning curve | Low | Medium |
+
+## My Recommendation
+
+**Use CSS for:**
+- Hover effects and transitions
+- Loading states and spinners
+- Simple keyframe animations
+- Anything that doesn't need React state
+
+**Use Framer Motion for:**
+- Page transitions
+- Scroll-triggered reveals
+- Interactive animations (drag, swipe)
+- Complex orchestrated sequences
+- Anything that needs AnimatePresence
+
+## The Hybrid Approach
+
+The best portfolios (like this one!) use both:
+
+```tsx
+// CSS for the infinite float animation
+<div className="animate-float">
+  {/* Framer Motion for the entrance */}
+  <motion.div
+    initial={{ opacity: 0, scale: 0 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ type: 'spring', delay: 0.2 }}
+  >
+    🚀
+  </motion.div>
+</div>
+```
+
+The key is choosing the right tool for each job. CSS for simple, performant animations. Framer Motion when you need React integration and complex orchestration.
+
+Happy animating! 🎨
