@@ -2,22 +2,27 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getPostBySlug, getAllPosts } from '@/lib/mdx'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { formatDate } from '@/lib/utils'
+import { formatDate, safeHref } from '@/lib/utils'
 import { Calendar, Clock, ArrowLeft, Tag } from 'lucide-react'
 import Link from 'next/link'
 import { ReadingProgress } from '@/components/ui/ReadingProgress'
 
 interface Props {
-  params: { slug: string }
+  params: { slug?: string }
 }
 
 export async function generateStaticParams() {
   const posts = getAllPosts()
-  return posts.map((p) => ({ slug: p.slug }))
+  return posts
+    .map((p) => p.slug?.trim())
+    .filter((slug): slug is string => Boolean(slug))
+    .map((slug) => ({ slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = getPostBySlug(params.slug)
+  const slug = params?.slug?.trim()
+  if (!slug) return {}
+  const post = getPostBySlug(slug)
   if (!post) return {}
 
   return {
@@ -34,7 +39,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function BlogPostPage({ params }: Props) {
-  const post = getPostBySlug(params.slug)
+  const slug = params?.slug?.trim()
+  if (!slug) notFound()
+
+  const post = getPostBySlug(slug)
   if (!post) notFound()
 
   const jsonLd = {
@@ -61,7 +69,7 @@ export default function BlogPostPage({ params }: Props) {
         <div className="max-w-3xl mx-auto">
           {/* Back */}
           <Link
-            href="/blog"
+            href={safeHref('/blog', '/')}
             className="inline-flex items-center gap-2 text-sm mb-8 transition-colors hover:text-[var(--accent)]"
             style={{ color: 'var(--muted)' }}
           >

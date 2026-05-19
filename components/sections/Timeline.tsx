@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { Briefcase, MapPin, Calendar } from 'lucide-react'
+import { useTranslations } from '@/hooks/useTranslations'
 
 interface Experience {
   id: string
@@ -23,6 +24,7 @@ function TimelineEntry({
   exp: Experience
   index: number
 }) {
+  const { t } = useTranslations()
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const isLeft = index % 2 === 0
@@ -69,7 +71,7 @@ function TimelineEntry({
           >
             <span className="flex items-center gap-1">
               <Calendar size={11} />
-              {exp.startDate} — {exp.current ? 'Present' : exp.endDate}
+              {exp.startDate} — {exp.current ? t('present') : exp.endDate}
             </span>
             {exp.location && (
               <span className="flex items-center gap-1">
@@ -97,7 +99,7 @@ function TimelineEntry({
                   className="w-1.5 h-1.5 rounded-full animate-pulse"
                   style={{ background: 'var(--accent)' }}
                 />
-                Current Position
+                {t('currentPosition')}
               </span>
             </div>
           )}
@@ -132,6 +134,7 @@ interface TimelineSectionProps {
 }
 
 export function TimelineSection({ experience }: TimelineSectionProps) {
+  const { t } = useTranslations()
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
@@ -151,13 +154,14 @@ export function TimelineSection({ experience }: TimelineSectionProps) {
             className="text-sm font-semibold tracking-widest uppercase"
             style={{ color: 'var(--accent)' }}
           >
-            Career
+            {t('timelineKicker')}
           </span>
           <h2
             className="text-4xl md:text-5xl font-black mt-2"
             style={{ color: 'var(--foreground)' }}
           >
-            Work <span style={{ color: 'var(--accent)' }}>Experience</span>
+            {t('timelineTitleLead')}{' '}
+            <span style={{ color: 'var(--accent)' }}>{t('timelineTitleAccent')}</span>
           </h2>
         </motion.div>
 

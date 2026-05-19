@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { GitBranch, Send, Heart, ExternalLink, MessageCircle } from 'lucide-react'
+import { useTranslations } from '@/hooks/useTranslations'
+import { safeHref } from '@/lib/utils'
 
 const SOCIAL_LINKS = [
   { href: 'https://github.com/suhrobbek', icon: GitBranch, label: 'GitHub' },
@@ -11,6 +13,7 @@ const SOCIAL_LINKS = [
 ]
 
 export function Footer() {
+  const { t } = useTranslations()
   return (
     <footer
       className="py-12 mt-20"
@@ -24,7 +27,7 @@ export function Footer() {
               SB<span style={{ color: 'var(--accent)' }}>.</span>
             </span>
             <p className="text-sm mt-1" style={{ color: 'var(--muted)' }}>
-              Full Stack Developer & UI/UX Designer
+              {t('footerTagline')}
             </p>
           </div>
 
@@ -33,7 +36,7 @@ export function Footer() {
             {SOCIAL_LINKS.map(({ href, icon: Icon, label }) => (
               <Link
                 key={href}
-                href={href}
+                href={safeHref(href, '#')}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
@@ -49,10 +52,11 @@ export function Footer() {
           </div>
 
           {/* Copyright */}
-          <p className="text-sm flex items-center gap-1" style={{ color: 'var(--muted)' }}>
-            Made with{' '}
+          <p className="text-sm flex items-center gap-1 flex-wrap justify-center" style={{ color: 'var(--muted)' }}>
+            {t('footerLove')}{' '}
             <Heart size={14} style={{ color: 'var(--accent)' }} fill="currentColor" />{' '}
-            by <span style={{ color: 'var(--accent)' }}>Suhrobbek</span> © {new Date().getFullYear()}
+            {t('footerBy') ? `${t('footerBy')} ` : ''}
+            <span style={{ color: 'var(--accent)' }}>Suhrobbek</span> © {new Date().getFullYear()}
           </p>
         </div>
       </div>

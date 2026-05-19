@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Edit2, Trash2, Star, ExternalLink, GitBranch, Eye, Upload, X, ImageIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { projectExternalHref } from '@/lib/utils'
 
 interface Project {
   id: string
@@ -111,13 +112,13 @@ export function ProjectsAdmin({ projects: initial }: { projects: Project[] }) {
 
                 <div className="flex items-center justify-between text-xs" style={{ color: 'var(--muted)' }}>
                   <div className="flex gap-3">
-                    {project.liveUrl && (
-                      <a href={project.liveUrl} target="_blank" className="flex items-center gap-1 hover:text-[var(--accent)] transition-colors">
+                    {project.liveUrl?.trim() && (
+                      <a href={projectExternalHref(project.liveUrl)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-[var(--accent)] transition-colors">
                         <ExternalLink size={11} /> Live
                       </a>
                     )}
-                    {project.githubUrl && (
-                      <a href={project.githubUrl} target="_blank" className="flex items-center gap-1 hover:text-[var(--accent)] transition-colors">
+                    {project.githubUrl?.trim() && (
+                      <a href={projectExternalHref(project.githubUrl)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-[var(--accent)] transition-colors">
                         <GitBranch size={11} /> Code
                       </a>
                     )}

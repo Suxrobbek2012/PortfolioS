@@ -123,11 +123,16 @@ Content here...
 
 ## 🌐 Deploy to Vercel
 
-1. Push to GitHub
-2. Import to Vercel
-3. Add environment variables
-4. Change `DATABASE_URL` to PostgreSQL connection string
-5. Run `prisma db push` and `prisma db seed` in Vercel build
+1. Push your repository to GitHub
+2. Import the repo into Vercel
+3. Open Vercel project settings → Environment Variables
+4. Add these variables:
+   - `NEXTAUTH_SECRET` = your strong secret (min 32 chars)
+   - `NEXTAUTH_URL` = `https://your-app-name.vercel.app`
+   - `DATABASE_URL` = `file:./dev.db` (for simple deploy) or a PostgreSQL URL
+   - `ADMIN_EMAIL` and `ADMIN_PASSWORD` for admin login
+5. Deploy and verify the site URL shown by Vercel
+6. If using PostgreSQL, run `prisma db push` and `prisma db seed` in build
 
 ```bash
 # vercel.json is included for optimal configuration

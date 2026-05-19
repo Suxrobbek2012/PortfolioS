@@ -7,7 +7,7 @@ import { AdminSidebar } from '@/components/admin/AdminSidebar'
 import { getAllPosts } from '@/lib/mdx'
 import Link from 'next/link'
 import { FileText, Calendar, Clock, Tag, ExternalLink } from 'lucide-react'
-import { formatDate } from '@/lib/utils'
+import { formatDate, safeHref } from '@/lib/utils'
 
 export default async function AdminBlogPage() {
   const session = await getServerSession(authOptions)
@@ -37,7 +37,7 @@ export default async function AdminBlogPage() {
         </div>
 
         <div className="flex flex-col gap-4">
-          {posts.map((post) => (
+          {posts.filter((p) => p.slug?.trim()).map((post) => (
             <div
               key={post.slug}
               className="p-5 rounded-2xl flex items-start justify-between gap-4"
@@ -64,7 +64,7 @@ export default async function AdminBlogPage() {
                   </div>
                 </div>
               </div>
-              <Link href={`/blog/${post.slug}`} target="_blank" style={{ color: 'var(--muted)' }}
+              <Link href={safeHref(`/blog/${post.slug}`, '/blog')} target="_blank" style={{ color: 'var(--muted)' }}
                 className="flex-shrink-0 hover:text-[var(--accent)] transition-colors">
                 <ExternalLink size={16} />
               </Link>

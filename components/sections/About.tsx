@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Download, MapPin, Mail, Calendar } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslations } from '@/hooks/useTranslations'
 
 function CounterStat({ value, label, suffix = '+' }: { value: number; label: string; suffix?: string }) {
   const [count, setCount] = useState(0)
@@ -41,6 +42,7 @@ interface AboutSectionProps {
 }
 
 export function AboutSection({ settings }: AboutSectionProps) {
+  const { t, tf } = useTranslations()
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
 
@@ -102,14 +104,14 @@ export function AboutSection({ settings }: AboutSectionProps) {
                 className="text-sm font-semibold tracking-widest uppercase"
                 style={{ color: 'var(--accent)' }}
               >
-                About Me
+                {t('aboutKicker')}
               </span>
               <h2
                 className="text-4xl md:text-5xl font-black mt-2"
                 style={{ color: 'var(--foreground)' }}
               >
-                Crafting Digital{' '}
-                <span style={{ color: 'var(--accent)' }}>Experiences</span>
+                {t('aboutTitleLead')}{' '}
+                <span style={{ color: 'var(--accent)' }}>{t('aboutTitleAccent')}</span>
               </h2>
             </motion.div>
 
@@ -118,8 +120,7 @@ export function AboutSection({ settings }: AboutSectionProps) {
               className="text-base leading-relaxed"
               style={{ color: 'var(--muted)' }}
             >
-              {settings.bio ||
-                "I build fast, beautiful, and scalable web applications. Passionate about clean code and stunning user interfaces."}
+              {settings.bio || t('heroBioDefault')}
             </motion.p>
 
             <motion.p
@@ -127,17 +128,15 @@ export function AboutSection({ settings }: AboutSectionProps) {
               className="text-base leading-relaxed"
               style={{ color: 'var(--muted)' }}
             >
-              With {settings.yearsExperience || '5'}+ years of experience, I specialize in building
-              full-stack applications that combine elegant design with robust engineering. I love
-              turning complex problems into simple, beautiful solutions.
+              {tf('aboutSecondParagraph', { years: settings.yearsExperience || '5' })}
             </motion.p>
 
             {/* Info Grid */}
             <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { icon: MapPin, label: 'Location', value: settings.location || 'Tashkent, Uzbekistan' },
-                { icon: Mail, label: 'Email', value: settings.email || 'suhrobbek@portfolio.dev' },
-                { icon: Calendar, label: 'Experience', value: `${settings.yearsExperience || '5'}+ Years` },
+                { icon: MapPin, label: t('location'), value: settings.location || 'Tashkent, Uzbekistan' },
+                { icon: Mail, label: t('email'), value: settings.email || 'suhrobbek@portfolio.dev' },
+                { icon: Calendar, label: t('expLabel'), value: `${settings.yearsExperience || '5'}+` },
               ].map(({ icon: Icon, label, value }) => (
                 <div
                   key={label}
@@ -169,7 +168,7 @@ export function AboutSection({ settings }: AboutSectionProps) {
                     size={16}
                     className="transition-transform duration-300 group-hover:translate-y-0.5"
                   />
-                  Download CV
+                  {t('heroDownloadCv')}
                 </motion.button>
               </Link>
             </motion.div>
@@ -184,10 +183,10 @@ export function AboutSection({ settings }: AboutSectionProps) {
             className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 p-8 rounded-2xl"
             style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
           >
-            <CounterStat value={parseInt(settings.yearsExperience || '5')} label="Years Experience" suffix="+" />
-            <CounterStat value={parseInt(settings.projectsCompleted || '50')} label="Projects Completed" suffix="+" />
-            <CounterStat value={parseInt(settings.happyClients || '30')} label="Happy Clients" suffix="+" />
-            <CounterStat value={parseInt(settings.coffeeConsumed || '1000')} label="Cups of Coffee" suffix="+" />
+            <CounterStat value={parseInt(settings.yearsExperience || '5')} label={t('aboutStatYears')} suffix="+" />
+            <CounterStat value={parseInt(settings.projectsCompleted || '50')} label={t('aboutStatProjects')} suffix="+" />
+            <CounterStat value={parseInt(settings.happyClients || '30')} label={t('aboutStatClients')} suffix="+" />
+            <CounterStat value={parseInt(settings.coffeeConsumed || '1000')} label={t('aboutStatCoffee')} suffix="+" />
           </motion.div>
       </div>
     </section>

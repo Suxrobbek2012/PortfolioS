@@ -1,22 +1,27 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, Code2 } from 'lucide-react'
 import { ThemeSwitcher } from './ThemeSwitcher'
-
-const NAV_LINKS = [
-  { href: '#about', label: 'About' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#skills', label: 'Skills' },
-  { href: '#experience', label: 'Experience' },
-  { href: '#contact', label: 'Contact' },
-  { href: '/blog', label: 'Blog' },
-]
+import { LanguageSwitcher } from './LanguageSwitcher'
+import { useTranslations } from '@/hooks/useTranslations'
 
 export function Navbar() {
+  const { t } = useTranslations()
+  const navLinks = useMemo(
+    () => [
+      { href: '#about', label: t('about') },
+      { href: '#projects', label: t('projects') },
+      { href: '#skills', label: t('skills') },
+      { href: '#experience', label: t('experience') },
+      { href: '#contact', label: t('contact') },
+      { href: '/blog', label: t('blog') },
+    ],
+    [t]
+  )
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('')
@@ -80,7 +85,7 @@ export function Navbar() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((link) => {
+            {navLinks.map((link) => {
               const isActive =
                 activeSection === link.href.replace('#', '') ||
                 (link.href === '/blog' && pathname.startsWith('/blog'))
@@ -112,8 +117,9 @@ export function Navbar() {
           </div>
 
           {/* Right side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <ThemeSwitcher />
+            <LanguageSwitcher />
             {/* Mobile menu toggle */}
             <button
               className="md:hidden p-2 rounded-lg"
@@ -138,7 +144,7 @@ export function Navbar() {
               style={{ borderTop: '1px solid var(--border)', background: 'var(--surface)' }}
             >
               <div className="px-6 py-4 flex flex-col gap-4">
-                {NAV_LINKS.map((link, i) => (
+                {navLinks.map((link, i) => (
                   <motion.div
                     key={link.href}
                     initial={{ x: -20, opacity: 0 }}

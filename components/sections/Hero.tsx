@@ -1,23 +1,18 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowDown, Download, Mail, GitBranch, ExternalLink } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { TechIcons } from '@/components/ui/TechIcons'
+import { useTranslations } from '@/hooks/useTranslations'
+import { safeHref } from '@/lib/utils'
 
 const Hero3D = dynamic(() => import('@/components/three/Hero3D').then((m) => m.Hero3D), {
   ssr: false,
   loading: () => <div className="absolute inset-0" />,
 })
-
-const ROLES = [
-  'Full Stack Developer',
-  'UI/UX Designer',
-  'Open Source Contributor',
-  'Problem Solver',
-]
 
 const FLOATING_TECH = [
   { key: 'react', Icon: TechIcons.react, top: '18%', left: '8%', delay: 0, duration: 5 },
@@ -77,6 +72,12 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ settings }: HeroSectionProps) {
+  const { t } = useTranslations()
+  const roles = useMemo(
+    () => [t('heroRole1'), t('heroRole2'), t('heroRole3'), t('heroRole4')],
+    [t]
+  )
+
   const containerVariants = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.15 } },
@@ -149,7 +150,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
                 className="w-2 h-2 rounded-full animate-pulse"
                 style={{ background: 'var(--accent)' }}
               />
-              Available for work
+              {t('heroAvailable')}
             </span>
           </motion.div>
 
@@ -167,7 +168,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
 
           {/* Typing Role */}
           <motion.div variants={itemVariants} className="text-xl md:text-2xl font-medium h-8">
-            <TypingText texts={ROLES} />
+            <TypingText key={roles.join('|')} texts={roles} />
           </motion.div>
 
           {/* Bio */}
@@ -176,8 +177,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
             className="max-w-2xl text-base md:text-lg leading-relaxed"
             style={{ color: 'var(--muted)' }}
           >
-            {settings.bio ||
-              'I build fast, beautiful, and scalable web applications. Passionate about clean code and stunning user interfaces.'}
+            {settings.bio || t('heroBioDefault')}
           </motion.p>
 
           {/* Location */}
@@ -209,7 +209,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
                   boxShadow: 'var(--accent-glow)',
                 }}
               >
-                View My Work
+                {t('heroViewWork')}
               </motion.button>
             </Link>
 
@@ -233,7 +233,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
                 }}
               >
                 <Download size={16} className="transition-transform duration-300 group-hover:translate-y-0.5" />
-                Download CV
+                {t('heroDownloadCv')}
               </motion.button>
             </Link>
           </motion.div>
@@ -241,9 +241,18 @@ export function HeroSection({ settings }: HeroSectionProps) {
           {/* Social Links */}
           <motion.div variants={itemVariants} className="flex items-center gap-4">
             {[
-              { href: settings.github || '#', icon: GitBranch, label: 'GitHub' },
-              { href: settings.linkedin || '#', icon: ExternalLink, label: 'LinkedIn' },
-              { href: `mailto:${settings.email || 'suhrobbek@portfolio.dev'}`, icon: Mail, label: 'Email' },
+              { href: safeHref(settings.github, '#'), icon: GitBranch, label: 'GitHub' },
+              { href: safeHref(settings.linkedin, '#'), icon: ExternalLink, label: 'LinkedIn' },
+              {
+                href: safeHref(
+                  settings.email?.trim()
+                    ? `mailto:${settings.email.trim()}`
+                    : 'mailto:suhrobbek@portfolio.dev',
+                  '#'
+                ),
+                icon: Mail,
+                label: 'Email',
+              },
             ].map(({ href, icon: Icon, label }) => (
               <Link key={label} href={href} target="_blank" aria-label={label}>
                 <motion.div
@@ -275,7 +284,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
         style={{ color: 'var(--muted)' }}
       >
-        <span className="text-xs font-medium tracking-widest uppercase">Scroll</span>
+        <span className="text-xs font-medium tracking-widest uppercase">{t('heroScroll')}</span>
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}

@@ -38,19 +38,21 @@ export function getAllPosts(): BlogPost[] {
   })
 
   return posts
-    .filter((p) => p.published)
+    .filter((p) => p.published && Boolean(p.slug?.trim()))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
 export function getPostBySlug(slug: string): BlogPost | null {
-  const filePath = path.join(BLOG_DIR, `${slug}.mdx`)
+  const s = slug?.trim()
+  if (!s) return null
+  const filePath = path.join(BLOG_DIR, `${s}.mdx`)
   if (!fs.existsSync(filePath)) return null
 
   const raw = fs.readFileSync(filePath, 'utf-8')
   const { data, content } = matter(raw)
 
   return {
-    slug,
+    slug: s,
     title: data.title || '',
     excerpt: data.excerpt || '',
     date: data.date || '',

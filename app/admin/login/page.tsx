@@ -5,6 +5,7 @@ import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Eye, EyeOff, Loader2, ShieldCheck, AlertTriangle, Lock } from 'lucide-react'
+import { AdminControls } from '@/components/layout/AdminControls'
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -79,6 +80,11 @@ export default function AdminLoginPage() {
       className="min-h-screen flex items-center justify-center px-6 relative overflow-hidden"
       style={{ background: 'var(--background)' }}
     >
+      {/* Theme & Language Switchers */}
+      <div className="fixed top-6 right-6 z-50">
+        <AdminControls />
+      </div>
+
       {/* Background grid */}
       <div
         className="absolute inset-0 opacity-[0.03]"

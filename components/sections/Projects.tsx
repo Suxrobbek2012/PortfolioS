@@ -5,6 +5,8 @@ import { motion, useInView, AnimatePresence, LayoutGroup } from 'framer-motion'
 import { ExternalLink, GitBranch, Star, X, Eye } from 'lucide-react'
 import Link from 'next/link'
 import { ProjectComments } from '@/components/ui/ProjectComments'
+import { useTranslations } from '@/hooks/useTranslations'
+import { projectExternalHref } from '@/lib/utils'
 
 interface Project {
   id: string
@@ -20,7 +22,8 @@ interface Project {
   views?: number
 }
 
-const FILTERS = ['All', 'React', 'Next.js', 'TypeScript', 'Node.js', 'Vue.js']
+const TECH_TAGS = ['React', 'Next.js', 'TypeScript', 'Node.js', 'Vue.js']
+const ALL_FILTER = '__all__'
 
 // View counter hook — increments only on real visit
 function useProjectView(projectId: string, isOpen: boolean) {
@@ -49,6 +52,7 @@ function useProjectView(projectId: string, isOpen: boolean) {
 }
 
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
+  const { t } = useTranslations()
   const views = useProjectView(project.id, true)
 
   return (
@@ -88,7 +92,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                   <circle cx="8.5" cy="8.5" r="1.5"/>
                   <path d="M21 15l-5-5L5 21"/>
                 </svg>
-                <span className="text-sm" style={{ color: 'var(--muted)' }}>No image</span>
+                <span className="text-sm" style={{ color: 'var(--muted)' }}>{t('noImage')}</span>
               </div>
             )}
 
@@ -108,7 +112,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                   className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium"
                   style={{ background: 'rgba(var(--accent-rgb), 0.9)', color: 'var(--background)' }}
                 >
-                  <Star size={10} fill="currentColor" /> Featured
+                  <Star size={10} fill="currentColor" /> {t('featured')}
                 </span>
               </div>
             )}
@@ -131,7 +135,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                   }}
                 >
                   <Eye size={12} style={{ color: 'var(--accent)' }} />
-                  <span>{views.toLocaleString()} views</span>
+                  <span>{views.toLocaleString()} {t('views')}</span>
                 </div>
               )}
             </div>
@@ -159,19 +163,19 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
 
             {/* Links */}
             <div className="flex gap-3 mb-6">
-              {project.liveUrl && (
-                <Link href={project.liveUrl} target="_blank">
+              {project.liveUrl?.trim() && (
+                <Link href={projectExternalHref(project.liveUrl)} target="_blank" rel="noopener noreferrer">
                   <motion.button
                     whileHover={{ scale: 1.03 }}
                     className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium"
                     style={{ background: 'var(--accent)', color: 'var(--background)' }}
                   >
-                    <ExternalLink size={14} /> Live Demo
+                    <ExternalLink size={14} /> {t('liveDemo')}
                   </motion.button>
                 </Link>
               )}
-              {project.githubUrl && (
-                <Link href={project.githubUrl} target="_blank">
+              {project.githubUrl?.trim() && (
+                <Link href={projectExternalHref(project.githubUrl)} target="_blank" rel="noopener noreferrer">
                   <motion.button
                     whileHover={{ scale: 1.03 }}
                     className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium"
@@ -181,7 +185,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                       border: '1px solid var(--border)',
                     }}
                   >
-                    <GitBranch size={14} /> Source Code
+                    <GitBranch size={14} /> {t('sourceCode')}
                   </motion.button>
                 </Link>
               )}
@@ -200,6 +204,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
 }
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const { t } = useTranslations()
   const [hovered, setHovered] = useState(false)
   const [selected, setSelected] = useState(false)
   const views = useProjectView(project.id, false)
@@ -269,7 +274,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               className="text-white text-xs font-medium transition-transform duration-300"
               style={{ transform: hovered ? 'translateY(0)' : 'translateY(8px)' }}
             >
-              Click to view details
+              {t('clickToView')}
             </p>
           </div>
 
@@ -280,7 +285,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium"
                 style={{ background: 'rgba(var(--accent-rgb), 0.9)', color: 'var(--background)' }}
               >
-                <Star size={9} fill="currentColor" /> Featured
+                <Star size={9} fill="currentColor" /> {t('featured')}
               </span>
             </div>
           )}
@@ -332,28 +337,30 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
           {/* Links */}
           <div className="flex gap-3">
-            {project.liveUrl && (
+            {project.liveUrl?.trim() && (
               <Link
-                href={project.liveUrl}
+                href={projectExternalHref(project.liveUrl)}
                 target="_blank"
+                rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-1 text-xs font-medium transition-colors"
                 style={{ color: 'var(--accent)' }}
               >
-                <ExternalLink size={11} /> Live
+                <ExternalLink size={11} /> {t('live')}
               </Link>
             )}
-            {project.githubUrl && (
+            {project.githubUrl?.trim() && (
               <Link
-                href={project.githubUrl}
+                href={projectExternalHref(project.githubUrl)}
                 target="_blank"
+                rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-1 text-xs font-medium transition-colors"
                 style={{ color: 'var(--muted)' }}
                 onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--accent)')}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--muted)')}
               >
-                <GitBranch size={11} /> Code
+                <GitBranch size={11} /> {t('code')}
               </Link>
             )}
           </div>
@@ -370,12 +377,13 @@ interface ProjectsSectionProps {
 }
 
 export function ProjectsSection({ projects }: ProjectsSectionProps) {
-  const [activeFilter, setActiveFilter] = useState('All')
+  const { t } = useTranslations()
+  const [activeFilter, setActiveFilter] = useState(ALL_FILTER)
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
 
   const filtered =
-    activeFilter === 'All'
+    activeFilter === ALL_FILTER
       ? projects
       : projects.filter((p) => p.tags.includes(activeFilter))
 
@@ -390,13 +398,14 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
           className="text-center mb-16"
         >
           <span className="text-sm font-semibold tracking-widest uppercase" style={{ color: 'var(--accent)' }}>
-            Portfolio
+            {t('projectsKicker')}
           </span>
           <h2 className="text-4xl md:text-5xl font-black mt-2" style={{ color: 'var(--foreground)' }}>
-            Featured <span style={{ color: 'var(--accent)' }}>Projects</span>
+            {t('projectsTitleLead')}{' '}
+            <span style={{ color: 'var(--accent)' }}>{t('projectsTitleAccent')}</span>
           </h2>
           <p className="mt-4 max-w-xl mx-auto" style={{ color: 'var(--muted)' }}>
-            A selection of projects I&apos;ve built — from concept to deployment.
+            {t('projectsSubtitle')}
           </p>
         </motion.div>
 
@@ -407,7 +416,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="flex flex-wrap justify-center gap-3 mb-12"
         >
-          {FILTERS.map((filter) => (
+          {[ALL_FILTER, ...TECH_TAGS].map((filter) => (
             <motion.button
               key={filter}
               whileHover={{ scale: 1.05 }}
@@ -420,7 +429,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
                 border: `1px solid ${activeFilter === filter ? 'var(--accent)' : 'var(--border)'}`,
               }}
             >
-              {filter}
+              {filter === ALL_FILTER ? t('filterAll') : filter}
             </motion.button>
           ))}
         </motion.div>

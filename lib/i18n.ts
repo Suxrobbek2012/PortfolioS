@@ -1,0 +1,316 @@
+export type Language = 'uz' | 'ru' | 'en'
+
+export const LANGUAGES = {
+  uz: { label: 'Ўзбек', flag: '🇺🇿' },
+  ru: { label: 'Русский', flag: '🇷🇺' },
+  en: { label: 'English', flag: '🇬🇧' },
+} as const
+
+/** All UI strings used on the public site */
+export const translations = {
+  uz: {
+    about: 'Haqida',
+    projects: 'Loyihalar',
+    skills: 'Ko\'nikmalar',
+    experience: 'Tajriba',
+    contact: 'Bog\'lanish',
+    blog: 'Blog',
+    admin: 'Admin',
+    dashboard: 'Bosh sahifa',
+    login: 'Kirish',
+    logout: 'Chiqish',
+    save: 'Saqlash',
+    delete: 'O\'chirish',
+    edit: 'Tahrir',
+    cancel: 'Bekor qilish',
+    search: 'Qidirish',
+    welcome: 'Xush kelibsiz!',
+    loading: 'Yuklanmoqda...',
+    error: 'Xatolik',
+    success: 'Muvaffaqiyatli',
+    languageMenuTitle: 'Til',
+
+    heroAvailable: 'Ish uchun ochiqman',
+    heroRole1: 'Full Stack dasturchi',
+    heroRole2: 'UI/UX dizayner',
+    heroRole3: 'Open source ishtirokchi',
+    heroRole4: 'Muammolarni yechuvchi',
+    heroBioDefault:
+      'Tez, chiroyli va kengaytiriladigan veb-ilovalar yarataman. Toza kod va zoʻr interfeyslarga ishtiyoqliman.',
+    heroViewWork: 'Ishlarimni ko‘rish',
+    heroDownloadCv: 'CV yuklab olish',
+    heroScroll: 'Pastga',
+
+    aboutKicker: 'Men haqimda',
+    aboutTitleLead: 'Raqamli',
+    aboutTitleAccent: 'tajribalar',
+    aboutSecondParagraph:
+      '{{years}}+ yillik tajriba bilan murakkab masalalarni sodda va chiroyli yechimlarga aylantirishni yaxshi ko‘raman.',
+    aboutStatYears: 'Yillik tajriba',
+    aboutStatProjects: 'Yakunlangan loyihalar',
+    aboutStatClients: 'Mamnun mijozlar',
+    aboutStatCoffee: 'Qahva finjoni',
+
+    projectsKicker: 'Portfolio',
+    projectsTitleLead: 'Tanlangan',
+    projectsTitleAccent: 'loyihalar',
+    projectsSubtitle: 'G‘oyadan ishga tushirishgacha — tanlangan loyihalar.',
+    filterAll: 'Hammasi',
+    featured: 'Tavsiya etilgan',
+    liveDemo: 'Jonli demo',
+    sourceCode: 'Manba kodi',
+    views: 'ko‘rish',
+    noImage: 'Rasm yo‘q',
+    clickToView: 'Batafsil uchun bosing',
+    live: 'Jonli',
+    code: 'Kod',
+
+    skillsKicker: 'Mutaxassislik',
+    skillsTitleLead: 'Texnik',
+    skillsTitleAccent: 'ko‘nikmalar',
+    skillsSubtitle: 'Ajoyib mahsulotlar yaratishda kundalik ishlatadigan texnologiyalar.',
+    categoryFrontend: 'Frontend',
+    categoryBackend: 'Backend',
+    categoryTools: 'Vositalar va DevOps',
+    proficiency: 'darajasi',
+
+    timelineKicker: 'Karyera',
+    timelineTitleLead: 'Ish',
+    timelineTitleAccent: 'tajribasi',
+    present: 'hozirgi vaqt',
+    currentPosition: 'Joriy lavozim',
+
+    contactKicker: 'Aloqa',
+    contactTitleLead: 'Keling,',
+    contactTitleAccent: 'birga ishlaymiz',
+    contactSubtitle:
+      'Loyiha bormi? Xabar qoldiring — birgalikda ajoyib narsa yaratamiz.',
+    contactInfoTitle: 'Aloqa ma’lumotlari',
+    contactInfoSubtitle: 'Frilans va doimiy lavozimlar uchun ochiqman.',
+    yourName: 'Ismingiz',
+    emailAddress: 'Email manzil',
+    subject: 'Mavzu',
+    yourMessage: 'Xabaringiz',
+    sendMessage: 'Xabar yuborish',
+    toastSuccess: 'Xabar yuborildi! Tez orada javob beraman.',
+    toastError: 'Xatolik yuz berdi. Qayta urinib ko‘ring.',
+
+    footerTagline: 'Full Stack dasturchi va UI/UX dizayner',
+    footerLove: 'Sevgi bilan',
+    footerBy: '',
+
+    location: 'Joylashuv',
+    email: 'Email',
+    expLabel: 'Tajriba',
+  },
+  ru: {
+    about: 'Обо мне',
+    projects: 'Проекты',
+    skills: 'Навыки',
+    experience: 'Опыт',
+    contact: 'Контакты',
+    blog: 'Блог',
+    admin: 'Админ',
+    dashboard: 'Панель',
+    login: 'Вход',
+    logout: 'Выход',
+    save: 'Сохранить',
+    delete: 'Удалить',
+    edit: 'Изменить',
+    cancel: 'Отмена',
+    search: 'Поиск',
+    welcome: 'Добро пожаловать!',
+    loading: 'Загрузка...',
+    error: 'Ошибка',
+    success: 'Успешно',
+    languageMenuTitle: 'Язык',
+
+    heroAvailable: 'Открыт к предложениям',
+    heroRole1: 'Full Stack разработчик',
+    heroRole2: 'UI/UX дизайнер',
+    heroRole3: 'Участник open source',
+    heroRole4: 'Решаю сложные задачи',
+    heroBioDefault:
+      'Создаю быстрые, красивые и масштабируемые веб-приложения. Увлечён чистым кодом и сильными интерфейсами.',
+    heroViewWork: 'Смотреть работы',
+    heroDownloadCv: 'Скачать CV',
+    heroScroll: 'Вниз',
+
+    aboutKicker: 'Обо мне',
+    aboutTitleLead: 'Цифровые',
+    aboutTitleAccent: 'решения',
+    aboutSecondParagraph:
+      'С опытом {{years}}+ лет создаю full-stack приложения, сочетающие аккуратный дизайн и надёжную инженерию. Люблю превращать сложные задачи в простые и красивые решения.',
+    aboutStatYears: 'Лет опыта',
+    aboutStatProjects: 'Завершённых проектов',
+    aboutStatClients: 'Довольных клиентов',
+    aboutStatCoffee: 'Чашек кофе',
+
+    projectsKicker: 'Портфолио',
+    projectsTitleLead: 'Избранные',
+    projectsTitleAccent: 'проекты',
+    projectsSubtitle: 'Подборка проектов — от идеи до продакшена.',
+    filterAll: 'Все',
+    featured: 'Избранное',
+    liveDemo: 'Демо',
+    sourceCode: 'Исходный код',
+    views: 'просмотров',
+    noImage: 'Нет изображения',
+    clickToView: 'Нажмите для подробностей',
+    live: 'Демо',
+    code: 'Код',
+
+    skillsKicker: 'Экспертиза',
+    skillsTitleLead: 'Технические',
+    skillsTitleAccent: 'навыки',
+    skillsSubtitle: 'Технологии, с которыми работаю каждый день.',
+    categoryFrontend: 'Frontend',
+    categoryBackend: 'Backend',
+    categoryTools: 'Инструменты и DevOps',
+    proficiency: 'уровень',
+
+    timelineKicker: 'Карьера',
+    timelineTitleLead: 'Опыт',
+    timelineTitleAccent: 'работы',
+    present: 'настоящее время',
+    currentPosition: 'Текущая позиция',
+
+    contactKicker: 'Связаться',
+    contactTitleLead: 'Давайте',
+    contactTitleAccent: 'работать вместе',
+    contactSubtitle:
+      'Есть проект? Напишите — вместе сделаем что-то классное.',
+    contactInfoTitle: 'Контакты',
+    contactInfoSubtitle: 'Доступен для фриланса и full-time.',
+    yourName: 'Ваше имя',
+    emailAddress: 'Email',
+    subject: 'Тема',
+    yourMessage: 'Сообщение',
+    sendMessage: 'Отправить',
+    toastSuccess: 'Сообщение отправлено! Скоро отвечу.',
+    toastError: 'Что-то пошло не так. Попробуйте снова.',
+
+    footerTagline: 'Full Stack разработчик и UI/UX дизайнер',
+    footerLove: 'С любовью',
+    footerBy: '',
+
+    location: 'Локация',
+    email: 'Почта',
+    expLabel: 'Опыт',
+  },
+  en: {
+    about: 'About',
+    projects: 'Projects',
+    skills: 'Skills',
+    experience: 'Experience',
+    contact: 'Contact',
+    blog: 'Blog',
+    admin: 'Admin',
+    dashboard: 'Dashboard',
+    login: 'Login',
+    logout: 'Logout',
+    save: 'Save',
+    delete: 'Delete',
+    edit: 'Edit',
+    cancel: 'Cancel',
+    search: 'Search',
+    welcome: 'Welcome!',
+    loading: 'Loading...',
+    error: 'Error',
+    success: 'Success',
+    languageMenuTitle: 'Language',
+
+    heroAvailable: 'Available for work',
+    heroRole1: 'Full Stack Developer',
+    heroRole2: 'UI/UX Designer',
+    heroRole3: 'Open Source Contributor',
+    heroRole4: 'Problem Solver',
+    heroBioDefault:
+      'I build fast, beautiful, and scalable web applications. Passionate about clean code and stunning user interfaces.',
+    heroViewWork: 'View My Work',
+    heroDownloadCv: 'Download CV',
+    heroScroll: 'Scroll',
+
+    aboutKicker: 'About Me',
+    aboutTitleLead: 'Crafting Digital',
+    aboutTitleAccent: 'Experiences',
+    aboutSecondParagraph:
+      'With {{years}}+ years of experience, I specialize in building full-stack applications that combine elegant design with robust engineering. I love turning complex problems into simple, beautiful solutions.',
+    aboutStatYears: 'Years Experience',
+    aboutStatProjects: 'Projects Completed',
+    aboutStatClients: 'Happy Clients',
+    aboutStatCoffee: 'Cups of Coffee',
+
+    projectsKicker: 'Portfolio',
+    projectsTitleLead: 'Featured',
+    projectsTitleAccent: 'Projects',
+    projectsSubtitle: 'A selection of projects I\'ve built — from concept to deployment.',
+    filterAll: 'All',
+    featured: 'Featured',
+    liveDemo: 'Live Demo',
+    sourceCode: 'Source Code',
+    views: 'views',
+    noImage: 'No image',
+    clickToView: 'Click to view details',
+    live: 'Live',
+    code: 'Code',
+
+    skillsKicker: 'Expertise',
+    skillsTitleLead: 'Technical',
+    skillsTitleAccent: 'Skills',
+    skillsSubtitle: 'Technologies I work with daily to build exceptional products.',
+    categoryFrontend: 'Frontend',
+    categoryBackend: 'Backend',
+    categoryTools: 'Tools & DevOps',
+    proficiency: 'proficiency',
+
+    timelineKicker: 'Career',
+    timelineTitleLead: 'Work',
+    timelineTitleAccent: 'Experience',
+    present: 'Present',
+    currentPosition: 'Current Position',
+
+    contactKicker: 'Get In Touch',
+    contactTitleLead: 'Let\'s',
+    contactTitleAccent: 'Work Together',
+    contactSubtitle:
+      'Have a project in mind? I\'d love to hear about it. Send me a message and let\'s create something amazing.',
+    contactInfoTitle: 'Contact Information',
+    contactInfoSubtitle: 'I\'m currently available for freelance work and full-time positions.',
+    yourName: 'Your Name',
+    emailAddress: 'Email Address',
+    subject: 'Subject',
+    yourMessage: 'Your Message',
+    sendMessage: 'Send Message',
+    toastSuccess: 'Message sent! I\'ll get back to you soon.',
+    toastError: 'Something went wrong. Please try again.',
+
+    footerTagline: 'Full Stack Developer & UI/UX Designer',
+    footerLove: 'Made with',
+    footerBy: 'by',
+
+    location: 'Location',
+    email: 'Email',
+    expLabel: 'Experience',
+  },
+} as const
+
+export type TranslationKey = keyof typeof translations.en
+
+export function getTranslation(lang: Language, key: TranslationKey): string {
+  const pack = translations[lang] as Record<string, string>
+  const fallback = translations.en as Record<string, string>
+  return pack[key] ?? fallback[key] ?? String(key)
+}
+
+export function formatTranslation(
+  lang: Language,
+  key: TranslationKey,
+  vars: Record<string, string | number>
+): string {
+  let s = getTranslation(lang, key)
+  for (const [k, v] of Object.entries(vars)) {
+    s = s.replace(new RegExp(`\\{\\{${k}\\}\\}`, 'g'), String(v))
+  }
+  return s
+}

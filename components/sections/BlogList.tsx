@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { Calendar, Clock, Tag, ArrowRight } from 'lucide-react'
-import { formatDate } from '@/lib/utils'
+import { formatDate, safeHref } from '@/lib/utils'
 import type { BlogPost } from '@/lib/mdx'
 
 export function BlogList({ posts }: { posts: BlogPost[] }) {
@@ -17,14 +17,14 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
 
   return (
     <div className="flex flex-col gap-6">
-      {posts.map((post, i) => (
+      {posts.filter((p) => p.slug?.trim()).map((post, i) => (
         <motion.article
           key={post.slug}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: i * 0.1 }}
         >
-          <Link href={`/blog/${post.slug}`} className="block group">
+          <Link href={safeHref(`/blog/${post.slug}`, '/blog')} className="block group">
             <div
               className="p-6 rounded-2xl transition-all duration-300 hover:border-[var(--accent)]"
               style={{

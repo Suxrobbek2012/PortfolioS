@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
+import { safeHref } from '@/lib/utils'
 import {
   LayoutDashboard,
   FolderOpen,
@@ -15,6 +16,8 @@ import {
   Code2,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
+import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher'
 
 const NAV_ITEMS = [
   { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -60,7 +63,7 @@ export function AdminSidebar() {
         {NAV_ITEMS.map(({ href, icon: Icon, label }) => {
           const active = pathname === href
           return (
-            <Link key={href} href={href}>
+            <Link key={href} href={safeHref(href, '/')}>
               <motion.div
                 whileHover={{ x: 4 }}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors"
@@ -77,6 +80,12 @@ export function AdminSidebar() {
           )
         })}
       </nav>
+
+      {/* Theme & Language Switchers */}
+      <div className="p-4 flex gap-2 justify-center" style={{ borderTop: '1px solid var(--border)' }}>
+        <ThemeSwitcher />
+        <LanguageSwitcher />
+      </div>
 
       {/* Sign Out */}
       <div className="p-4" style={{ borderTop: '1px solid var(--border)' }}>

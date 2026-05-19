@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { AdminSidebar } from '@/components/admin/AdminSidebar'
+import Link from 'next/link'
 import { FolderOpen, FileText, MessageSquare, Zap, Eye, TrendingUp } from 'lucide-react'
 
 async function getStats() {
@@ -85,7 +86,7 @@ export default async function DashboardPage() {
               { href: '/admin/messages', label: 'View Messages', icon: MessageSquare },
               { href: '/admin/settings', label: 'Settings', icon: Zap },
             ].map(({ href, label, icon: Icon }) => (
-              <a
+              <Link
                 key={href}
                 href={href}
                 className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium transition-all hover:scale-105"
@@ -97,7 +98,7 @@ export default async function DashboardPage() {
               >
                 <Icon size={16} style={{ color: 'var(--accent)' }} />
                 {label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

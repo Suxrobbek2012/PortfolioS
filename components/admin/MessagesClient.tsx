@@ -134,9 +134,14 @@ export function MessagesClient({ messages: initial }: { messages: Message[] }) {
             </div>
 
             <a
-              href={`mailto:${selected.email}`}
+              href={selected.email?.trim() ? `mailto:${selected.email.trim()}` : '#'}
               className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl text-sm font-medium"
-              style={{ background: 'var(--accent)', color: 'var(--background)' }}
+              style={{
+                background: 'var(--accent)',
+                color: 'var(--background)',
+                pointerEvents: selected.email?.trim() ? 'auto' : 'none',
+                opacity: selected.email?.trim() ? 1 : 0.5,
+              }}
             >
               <Mail size={14} />
               Reply via Email

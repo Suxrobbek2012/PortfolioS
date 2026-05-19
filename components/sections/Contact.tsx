@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Send, Mail, MapPin, GitBranch, ExternalLink, Check, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useTranslations } from '@/hooks/useTranslations'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
@@ -97,6 +98,7 @@ function FloatingTextarea({
 }
 
 export function ContactSection() {
+  const { t } = useTranslations()
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
   const formRef = useRef<HTMLFormElement>(null)
@@ -119,14 +121,14 @@ export function ContactSection() {
       if (!res.ok) throw new Error('Failed')
 
       setFormState('success')
-      toast.success('Message sent! I\'ll get back to you soon.')
+      toast.success(t('toastSuccess'))
       setFields({ name: '', email: '', subject: '', message: '' })
 
       setTimeout(() => setFormState('idle'), 3000)
     } catch {
       setFormState('error')
       setShake(true)
-      toast.error('Something went wrong. Please try again.')
+      toast.error(t('toastError'))
       setTimeout(() => { setShake(false); setFormState('idle') }, 1000)
     }
   }
@@ -145,16 +147,17 @@ export function ContactSection() {
             className="text-sm font-semibold tracking-widest uppercase"
             style={{ color: 'var(--accent)' }}
           >
-            Get In Touch
+            {t('contactKicker')}
           </span>
           <h2
             className="text-4xl md:text-5xl font-black mt-2"
             style={{ color: 'var(--foreground)' }}
           >
-            Let&apos;s <span style={{ color: 'var(--accent)' }}>Work Together</span>
+            {t('contactTitleLead')}{' '}
+            <span style={{ color: 'var(--accent)' }}>{t('contactTitleAccent')}</span>
           </h2>
           <p className="mt-4 max-w-xl mx-auto" style={{ color: 'var(--muted)' }}>
-            Have a project in mind? I&apos;d love to hear about it. Send me a message and let&apos;s create something amazing.
+            {t('contactSubtitle')}
           </p>
         </motion.div>
 
@@ -168,16 +171,16 @@ export function ContactSection() {
           >
             <div>
               <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>
-                Contact Information
+                {t('contactInfoTitle')}
               </h3>
               <p className="text-sm" style={{ color: 'var(--muted)' }}>
-                I&apos;m currently available for freelance work and full-time positions.
+                {t('contactInfoSubtitle')}
               </p>
             </div>
 
             {[
-              { icon: Mail, label: 'Email', value: 'suhrobbek@portfolio.dev' },
-              { icon: MapPin, label: 'Location', value: 'Tashkent, Uzbekistan' },
+              { icon: Mail, label: t('email'), value: 'suhrobbek@portfolio.dev' },
+              { icon: MapPin, label: t('location'), value: 'Tashkent, Uzbekistan' },
             ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-center gap-4">
                 <div
@@ -238,14 +241,14 @@ export function ContactSection() {
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FloatingInput
-                  label="Your Name"
+                  label={t('yourName')}
                   name="name"
                   required
                   value={fields.name}
                   onChange={(v) => setFields((f) => ({ ...f, name: v }))}
                 />
                 <FloatingInput
-                  label="Email Address"
+                  label={t('emailAddress')}
                   name="email"
                   type="email"
                   required
@@ -255,14 +258,14 @@ export function ContactSection() {
               </div>
 
               <FloatingInput
-                label="Subject"
+                label={t('subject')}
                 name="subject"
                 value={fields.subject}
                 onChange={(v) => setFields((f) => ({ ...f, subject: v }))}
               />
 
               <FloatingTextarea
-                label="Your Message"
+                label={t('yourMessage')}
                 name="message"
                 required
                 value={fields.message}
@@ -306,7 +309,7 @@ export function ContactSection() {
                       className="flex items-center gap-2"
                     >
                       <Send size={16} />
-                      Send Message
+                      {t('sendMessage')}
                     </motion.div>
                   )}
                 </AnimatePresence>

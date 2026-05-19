@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { TechIcons } from '@/components/ui/TechIcons'
 import { Code2, Server, Wrench } from 'lucide-react'
+import { useTranslations } from '@/hooks/useTranslations'
 
 interface Skill {
   id: string
@@ -17,6 +18,7 @@ interface Skill {
 const SKILL_ICONS: Record<string, string> = {}
 
 function SkillBar({ skill, index }: { skill: Skill; index: number }) {
+  const { t } = useTranslations()
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true })
   const [hovered, setHovered] = useState(false)
@@ -85,7 +87,7 @@ function SkillBar({ skill, index }: { skill: Skill; index: number }) {
           className="text-xs mt-1"
           style={{ color: 'var(--muted)' }}
         >
-          {skill.level}% proficiency
+          {skill.level}% {t('proficiency')}
         </motion.p>
       )}
     </motion.div>
@@ -97,13 +99,14 @@ interface SkillsSectionProps {
 }
 
 export function SkillsSection({ skills }: SkillsSectionProps) {
+  const { t } = useTranslations()
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
 
   const categories = [
-    { key: 'frontend', label: 'Frontend', Icon: Code2 },
-    { key: 'backend', label: 'Backend', Icon: Server },
-    { key: 'tools', label: 'Tools & DevOps', Icon: Wrench },
+    { key: 'frontend', labelKey: 'categoryFrontend' as const, Icon: Code2 },
+    { key: 'backend', labelKey: 'categoryBackend' as const, Icon: Server },
+    { key: 'tools', labelKey: 'categoryTools' as const, Icon: Wrench },
   ]
 
   return (
@@ -120,16 +123,17 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
             className="text-sm font-semibold tracking-widest uppercase"
             style={{ color: 'var(--accent)' }}
           >
-            Expertise
+            {t('skillsKicker')}
           </span>
           <h2
             className="text-4xl md:text-5xl font-black mt-2"
             style={{ color: 'var(--foreground)' }}
           >
-            Technical <span style={{ color: 'var(--accent)' }}>Skills</span>
+            {t('skillsTitleLead')}{' '}
+            <span style={{ color: 'var(--accent)' }}>{t('skillsTitleAccent')}</span>
           </h2>
           <p className="mt-4 max-w-xl mx-auto" style={{ color: 'var(--muted)' }}>
-            Technologies I work with daily to build exceptional products.
+            {t('skillsSubtitle')}
           </p>
         </motion.div>
 
@@ -154,7 +158,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
                     <cat.Icon size={18} style={{ color: 'var(--accent)' }} />
                   </div>
                   <h3 className="text-lg font-bold" style={{ color: 'var(--foreground)' }}>
-                    {cat.label}
+                    {t(cat.labelKey)}
                   </h3>
                 </div>
 
