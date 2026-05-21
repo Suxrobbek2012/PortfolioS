@@ -30,21 +30,34 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    // Create upload directory
+    // Create upload directory (if possible)
     const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'projects')
-    await mkdir(uploadDir, { recursive: true })
+    try {
+      await mkdir(uploadDir, { recursive: true })
 
-    // Sanitize filename
-    const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
-    const filename = `project_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
-    const filepath = path.join(uploadDir, filename)
+      // Sanitize filename
+      const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+      const filename = `project_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
+      const filepath = path.join(uploadDir, filename)
 
-    await writeFile(filepath, buffer)
+      await writeFile(filepath, buffer)
 
-    return NextResponse.json({
-      url: `/uploads/projects/${filename}`,
-      filename,
-    })
+      return NextResponse.json({
+        url: `/uploads/projects/${filename}`,
+        filename,
+      })
+    } catch (fsError) {
+      console.error('Upload filesystem error:', fsError)
+
+      // If running on a platform with read-only filesystem (Vercel, some serverless), provide guidance
+      const isReadOnly = fsError && (fsError.code === 'EROFS' || fsError.message?.toLowerCase?.().includes('read-only'))
+
+      const guidance = isReadOnly || process.env.VERCEL
+        ? 'Server filesystem is read-only on this deployment. Configure external storage (e.g., Cloudinary, S3) and update the upload handler.'
+        : 'Failed to write file to disk.'
+
+      return NextResponse.json({ error: guidance }, { status: 500 })
+    }
   } catch (error) {
     console.error('Upload error:', error)
     return NextResponse.json({ error: 'Upload failed' }, { status: 500 })

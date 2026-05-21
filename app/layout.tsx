@@ -204,7 +204,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ThemeProvider>
             <CustomCursor />
             <Navbar />
-            <main>{children}</main>
+            <main style={{ paddingTop: 'var(--nav-height)' }}>{children}</main>
             <Footer />
             <AiChat />
             <Toaster
