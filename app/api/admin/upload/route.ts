@@ -46,11 +46,14 @@ export async function POST(req: NextRequest) {
         url: `/uploads/projects/${filename}`,
         filename,
       })
-    } catch (fsError) {
+    } catch (fsError: unknown) {
       console.error('Upload filesystem error:', fsError)
 
-      // If running on a platform with read-only filesystem (Vercel, some serverless), provide guidance
-      const isReadOnly = fsError && (fsError.code === 'EROFS' || fsError.message?.toLowerCase?.().includes('read-only'))
+      const errorInfo = fsError && typeof fsError === 'object'
+        ? fsError as { code?: string; message?: string }
+        : undefined
+
+      const isReadOnly = errorInfo?.code === 'EROFS' || errorInfo?.message?.toLowerCase()?.includes('read-only')
 
       const guidance = isReadOnly || process.env.VERCEL
         ? 'Server filesystem is read-only on this deployment. Configure external storage (e.g., Cloudinary, S3) and update the upload handler.'
